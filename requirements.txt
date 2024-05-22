@@ -1,0 +1,11 @@
+streamlit
+openai
+streamlit-chat
+pandas
+numpy
+matplotlib
+tensorflow
+streamlit-drawable-canvas
+opencv-python-headless
+gtts
+pillow
