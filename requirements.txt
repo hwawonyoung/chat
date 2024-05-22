@@ -9,3 +9,4 @@ streamlit-drawable-canvas
 opencv-python-headless
 gtts
 pillow
+OpenAI
