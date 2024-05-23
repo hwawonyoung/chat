@@ -1,9 +1,10 @@
 import streamlit as st
+from openai import OpenAI
 
 st.title("😀인공지능(Artificial Intelligence)")
 
 # 탭 생성 : 첫번째 탭의 이름은 Tab A 로, Tab B로 표시합니다.
-tab1, tab2, tab3 = st.tabs(['인공지능 역사','머신러닝', '딥러닝'])
+tab1, tab2, tab3 = st.tabs(['인공지능 역사','머신러닝', '챗GPT'])
 
 with tab1:
     # tab A 를 누르면 표시될 내용
@@ -27,13 +28,26 @@ with tab2:
     
 with tab3:
     # tab B를 누르면 표시될 내용
-    st.write("")
-    st.subheader('딥러닝(Deep Learning)')
-    st.markdown("딥 러닝은 인간의 **신경망을 모방**하여 학습하게 하는 기계학습 방법이다. 인간의 뇌는 약 860억 개의 뉴런이 연결되어 신경망을 구성한다."
-                " 이러한 신경망을 통해 다양한 감정을 느끼고 생각하게 되는 것이다. 이런 인간의 뇌 신경망을 모방한 것이 **인공 신경망**이다. "
-                " 인공 신경망은 **퍼셉트론**(인간의 뉴런에 해당)을 기본 단위로 사용하며, 이 퍼셉트론이 여러 개 연결되어 **심층 인공 신경망(DNN)**을 구성한다."
-                )
-    st.video("https://youtu.be/kvAa-76IWHc")
+    st.title("💬 Chatbot")
+    st.caption("🚀 A Streamlit chatbot powered by OpenAI")
+    if "messages" not in st.session_state:
+        st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
+
+    for msg in st.session_state.messages:
+        st.chat_message(msg["role"]).write(msg["content"])
+
+    if prompt := st.chat_input():
+    #if not openai_api_key:
+    #    st.info("Please add your OpenAI API key to continue.")
+    #    st.stop()
+
+        client = OpenAI(api_key='sk-proj-OUdVkViMxKBaQnp2GnIWT3BlbkFJzY9CHGiBlP9w6pniUQde')
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        st.chat_message("user").write(prompt)
+        response = client.chat.completions.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
+        msg = response.choices[0].message.content
+        st.session_state.messages.append({"role": "assistant", "content": msg})
+        st.chat_message("assistant").write(msg)
 
 
 
